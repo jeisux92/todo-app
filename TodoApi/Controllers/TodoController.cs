@@ -9,6 +9,7 @@ using TodoApi.Models;
 namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class TodoController : ControllerBase
     {
 
@@ -33,6 +34,13 @@ namespace TodoApi.Controllers
             return item is null ? (ActionResult)NotFound() : Ok(item);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        {
+            context.TodoItems.Add(todoItem);
+            int id = await context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetTodoItem), new { id }, todoItem);
+        }
 
     }
 }
